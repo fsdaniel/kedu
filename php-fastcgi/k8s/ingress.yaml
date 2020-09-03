@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "FCGI"
+    nginx.ingress.kubernetes.io/fastcgi-index: "index.php"
+    nginx.ingress.kubernetes.io/fastcgi-params-configmap: "demo-php-fastcgi"
+    kubernetes.io/tls-acme: "true"
+    #cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: php-fastcgi-demo
+spec:
+  rules:
+    - host: php-fastcgi.DOMAIN_PLACEHOLDER
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: php-fastcgi-demo
+              servicePort: fastcgi
+  tls:
+    - hosts:
+        - php-fastcgi.DOMAIN_PLACEHOLDER
+      secretName: php-fastcgi-DOMAIN_PLACEHOLDER-tls

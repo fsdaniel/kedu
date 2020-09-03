@@ -1,0 +1,21 @@
+accessKey: "message-of-the-day"
+secretKey: "simple-true-secret"
+replicas: 1
+ingress:
+  enabled: true
+  labels: {}
+  #annotations: {}
+  #   kubernetes.io/ingress.class: nginx
+  #   kubernetes.io/tls-acme: "true"
+  #   kubernetes.io/ingress.allow-http: "false"
+  #   kubernetes.io/ingress.global-static-ip-name: ""
+  #   nginx.ingress.kubernetes.io/secure-backends: "true"
+  # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  # nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0
+  path: /
+  hosts:
+    - s3.PLACEHOLDER_DOMAIN
+  #tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - s3.PLACEHOLDER_DOMAIN

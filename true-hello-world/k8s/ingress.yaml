@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: true-hello-world
+  namespace: hello-world
+spec:
+  rules:
+    - host: true-hello-world.PLACEHOLDER_DOMAIN
+      http:
+        paths:
+          - backend:
+              serviceName: true-hello-world
+              servicePort: 80

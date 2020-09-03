@@ -1,0 +1,39 @@
+checkInterval: 30
+concurrent: 10
+gitlabUrl: https://git.k8s.shiplog.io
+rbac:
+  clusterWideAccess: false
+  create: true
+runners:
+  builds:
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+  env:
+    DOCKER_HOST: tcp://127.0.0.1:2375
+    DOCKER_TLS_CERTDIR: ""
+  helpers:
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+  image: ubuntu:18.04
+  imagePullSecrets: []
+  namespace: gitlab-runners
+  privileged: true
+  services:
+    cpuRequests: 100m
+    memoryRequests: 128Mi
+  # assign jobs to secure nodes
+  nodeSelector:
+    true.nl/pool: secure
+
+# assign tolerations for jobs to run on secure nodes
+envVars:
+  - name: KUBERNETES_NODE_TOLERATIONS
+    value: secure=true:NoSchedule
+
+# assign gitlab-runner to secure nodes
+nodeSelector:
+  true.nl/pool: secure
+tolerations:
+  - effect: NoSchedule
+    key: secure
+    value: "true"

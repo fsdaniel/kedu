@@ -1,0 +1,22 @@
+stages:
+  - validate
+  - conformance
+
+validate:
+  stage: validate
+  image:
+    name: garethr/kubeval
+    entrypoint:
+      - ""
+  script:
+    #- kubeval --strict k8s/*     # Assume k8s configs are in folder k8s/
+    - find k8s/ -name '*.yaml' |grep -v chart |grep -v crd | xargs -n1 kubeval --strict
+
+conformance:
+  stage: conformance
+  image:
+    name: instrumenta/conftest:latest
+    entrypoint:
+      - ""
+  script:
+    - find k8s/ -name '*.yaml'  | xargs -n1 conftest test

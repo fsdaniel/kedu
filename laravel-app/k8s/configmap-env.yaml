@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel-app-env
+  labels:
+    tier: backend
+data:
+  APP_NAME: "Laravel-example"
+  APP_ENV: "dev"
+  APP_DEBUG: "true"
+  APP_URL: "https://laravel.PLACEHOLDER_DOMAIN"
+  ASSET_URL: "https://laravel.PLACEHOLDER_DOMAIN"
+  APP_LOG_LEVEL: "debug"
+
+  LOG_CHANNEL: "stderr"
+
+  BROADCAST_DRIVER: "log"
+  CACHE_DRIVER: "file"
+  QUEUE_CONNECTION: "database"
+  SESSION_DRIVER: "database"
+  SESSION_LIFETIME: "120"
+
+  REDIS_HOST: "redis"
+  REDIS_PASSWORD: "null"
+
+  REDIS_PORT: "6379"
+  MAIL_DRIVER: "smtp"
+  MAIL_HOST: "null"
+  MAIL_PORT: "2525"
+  MAIL_USERNAME: "null"
+  MAIL_PASSWORD: "null"
+  MAIL_ENCRYPTION: "null"

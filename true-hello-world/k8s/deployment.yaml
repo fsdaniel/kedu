@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: true-hello-world
+  name: true-hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: true-hello-world
+  template:
+    metadata:
+      labels:
+        app: true-hello-world
+    spec:
+      imagePullSecrets:
+        - name: onboarding-tmp-secret
+      containers:
+        - image: registry.services.k8s.true.nl/onboarding/true-hello-world:1.0
+          name: helloworld
+          ports:
+            - name: helloworld
+              containerPort: 80
+              protocol: TCP

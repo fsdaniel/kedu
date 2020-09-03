@@ -1,0 +1,12 @@
+allow_k8s_contexts('03795-sebastiaan-playground')
+
+image = 'registry.services.k8s.true.nl/onboarding/laravel-app:1.0'
+k8s_yaml(['k8s/deployment.yaml', 'k8s/configmap-env.yaml', 'k8s/configmap-nginx.yaml', 'k8s/ingress.yaml', 'k8s/svc.yaml'])
+
+docker_build(image, '.',
+  live_update=[
+    # Map the local source code into the container under /src
+    sync('src/', '/var/www/html'),
+  ]
+)
+

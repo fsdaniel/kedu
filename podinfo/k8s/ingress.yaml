@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+#    #kubernetes.io/tls-acme: "true"
+#    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: podinfo
+spec:
+  rules:
+    - host: podinfo.PLACEHOLDER_DOMAIN
+      http:
+        paths:
+          - backend:
+              serviceName: podinfo
+              servicePort: 9898
+#  tls:
+#    - hosts:
+#        - podinfo.PLACEHOLDER_DOMAIN
+#      secretName: podinfo-PLACEHOLDER_DOMAIN-tls

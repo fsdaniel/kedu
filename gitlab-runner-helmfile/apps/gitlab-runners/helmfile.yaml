@@ -1,0 +1,30 @@
+repositories:
+  - name: gitlab
+    url: https://charts.gitlab.io
+
+releases:
+  - name: gitlab-group
+    namespace: gitlab-runners
+    version: 0.12.0
+    chart: gitlab/gitlab-runner
+    values:
+      - values/secure.yaml
+      - runnerRegistrationToken: xxxxxx
+
+  - name: gitlab-group-tag
+    namespace: gitlab-runners
+    version: 0.12.0
+    chart: gitlab/gitlab-runner
+    values:
+      - values/secure.yaml
+      - runnerRegistrationToken: xxxxx
+        runners:
+          tags: in-kube
+
+  - name: gitlab-project-special
+    namespace: gitlab-runners
+    version: 0.12.0
+    chart: gitlab/gitlab-runner
+    values:
+      - values/secure.yaml
+      - runnerRegistrationToken: xxxxx

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-static-demo
+  name: nginx-static-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-static-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-static-demo
+    spec:
+      imagePullSecrets:
+        - name: onboarding-tmp-secret
+      containers:
+        - name: static
+          image: registry.services.k8s.true.nl/onboarding/nginx-static-demo:v1
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "100m"
+            limits:
+              cpu: "200m"
+              memory: "100Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: "nobody"

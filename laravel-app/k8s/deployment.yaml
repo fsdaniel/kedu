@@ -1,0 +1,114 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: laravel-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laravel-app
+  template:
+    metadata:
+      labels:
+        app: laravel-app
+    spec:
+      containers:
+      ## Php-fpm container that executes php scripts
+      - image: registry.services.k8s.true.nl/onboarding/laravel-app:1.0
+        imagePullPolicy: Always
+        name: laravel-app
+        readinessProbe:
+          tcpSocket:
+            port: 9000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 9000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "750m"
+          limits:
+            cpu: "2000m"
+        envFrom:
+          - configMapRef:
+              name: laravel-app-env 
+        env: 
+        - name: APP_KEY
+          valueFrom:
+           secretKeyRef:
+             key: appkey 
+             name: laravel-app-key
+        - name: DB_CONNECTION
+          value: "mysql"
+        - name: DB_HOST
+          value: "laravel-mysql"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_USERNAME
+          value: root
+        - name: DB_DATABASE
+          value: "laravel"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: mysql-pass
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: code
+      ## Nginx webserver that serves static assets
+      - image: nginxinc/nginx-unprivileged:stable
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "25m"
+          limits:
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: code
+        - mountPath: /etc/nginx/conf.d
+          name: config
+      ## Init container that copies the laravel source to a shared volume between nginx and php-fpm containers.
+      initContainers:
+      - args:
+        - "cp -a /code/* /var/www/html"
+        command:
+        - bash
+        - -c
+        image: registry.services.k8s.true.nl/onboarding/laravel-app:1.0
+        imagePullPolicy: Always
+        name: assets
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: code
+      restartPolicy: Always
+      volumes:
+      - emptyDir: {}
+        name: code
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: vhost
+            path: nginx.conf
+          name: nginx-config
+        name: config

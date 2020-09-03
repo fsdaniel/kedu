@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: podinfo
+  name: podinfo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: podinfo
+  template:
+    metadata:
+      labels:
+        app: podinfo
+    spec:
+      containers:
+        - image: stefanprodan/podinfo:3.2.0
+          name: podinfo
+          env:
+            - name: PODINFO_UI_COLOR
+              value: "#34577c"
+          ports:
+            - name: http
+              containerPort: 9898
+              protocol: TCP

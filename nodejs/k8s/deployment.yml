@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-example
+  template:
+    metadata:
+      labels:
+        app: nodejs-example
+    spec:
+      imagePullSecrets:
+        - name: onboarding-tmp-secret
+      containers:
+        - name: nodejs-example
+          image: registry.services.k8s.true.nl/onboarding/nodejs-example:1.0
+#          volumeMounts:
+#            - mountPath: /data
+#              name: data
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          ports:
+            - name: nodejs
+              containerPort: 3000
+              protocol: TCP
+          imagePullPolicy: Always
+#      volumes:
+#        - name: data
+#          persistentVolumeClaim:
+#            claimName: nodejs-example-data

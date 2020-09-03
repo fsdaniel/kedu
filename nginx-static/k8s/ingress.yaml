@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-static-static
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+#    kubernetes.io/tls-acme: "true"
+#    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - host: static.PLACEHOLDER_DOMAIN
+      http:
+        paths:
+          - path: /static
+            backend:
+              serviceName: nginx-static-demo
+              servicePort: http
+#  tls:
+#    - hosts
+#        - static.PLACEHOLDER_DOMAIN
+#      secretName: static-PLACEHOLDER_DOMAIN-tls
+

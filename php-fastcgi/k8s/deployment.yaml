@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: php-fastcgi-demo
+  name: php-fastcgi-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-fastcgi-demo
+  template:
+    metadata:
+      labels:
+        app: php-fastcgi-demo
+    spec:
+      imagePullSecrets:
+        - name: onboarding-tmp-secret
+      containers:
+        - image: registry.services.k8s.true.nl/onboarding/php-fastcgi-demo:1.0
+          imagePullPolicy: Always
+          name: php-fastcgi-demo
+          ports:
+            - name: fastcgi
+              containerPort: 9000
+              protocol: TCP
